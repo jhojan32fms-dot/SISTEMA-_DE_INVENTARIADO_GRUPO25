@@ -14,7 +14,7 @@ public class SISTEMA_INVENTARIADO_FERRETERIA_SANTA_CRUZ_SRL {
         String contraseña;
         int opcion;
 
-        System.out.println("===== FERRETERIA SANTA CRUZ =====");
+        System.out.println("===== FERRETERIA SANTA CRUZ S.R.L =====");
 
         System.out.print("Usuario: ");
         usuario = sc.nextLine();
