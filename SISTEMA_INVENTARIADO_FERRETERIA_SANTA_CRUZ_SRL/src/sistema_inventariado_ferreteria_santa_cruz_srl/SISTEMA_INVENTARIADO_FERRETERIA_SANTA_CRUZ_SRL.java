@@ -1,20 +1,64 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
 package sistema_inventariado_ferreteria_santa_cruz_srl;
 
-/**
- *
- * @author Solange Tuesta
- */
+import java.util.Scanner;
+
 public class SISTEMA_INVENTARIADO_FERRETERIA_SANTA_CRUZ_SRL {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-        // TODO code application logic here
+
+        Scanner sc = new Scanner(System.in);
+
+        Login login = new Login();
+
+        String usuario;
+        String contraseña;
+        int opcion;
+
+        System.out.println("===== FERRETERIA SANTA CRUZ =====");
+
+        System.out.print("Usuario: ");
+        usuario = sc.nextLine();
+
+        System.out.print("Contraseña: ");
+        contraseña = sc.nextLine();
+
+        if (login.validar(usuario, contraseña)) {
+
+            System.out.println("\nBienvenido al sistema.");
+
+            System.out.println("\n------ MENU ------");
+            System.out.println("1. Registrar producto");
+            System.out.println("2. Buscar producto por codigo");
+            System.out.println("3. Salir");
+            System.out.print("Seleccione una opcion: ");
+
+            opcion = sc.nextInt();
+
+            switch (opcion) {
+                case 1:
+                    System.out.println("Registrar producto...");
+                    break;
+
+                case 2:
+                    System.out.println("Buscar producto...");
+                    break;
+
+                case 3:
+                    System.out.println("Gracias por usar el sistema.");
+                    break;
+
+                default:
+                    System.out.println("Opcion incorrecta.");
+            }
+
+        } else {
+
+            System.out.println("Usuario o contraseña incorrectos.");
+
+        }
+
+        sc.close();
+
     }
-    
+
 }
