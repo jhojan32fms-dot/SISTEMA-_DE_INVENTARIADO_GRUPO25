@@ -7,7 +7,7 @@ public class Conexion {
 
     private static final String URL = "jdbc:mysql://localhost:3306/ferreteria_t1";
     private static final String USUARIO = "root";
-    private static final String PASSWORD = "12345678";
+    private static final String PASSWORD = "root";
 
     public static Connection conectar() {
 
