@@ -6,59 +6,38 @@ public class SISTEMA_INVENTARIADO_FERRETERIA_SANTA_CRUZ_SRL {
 
     public static void main(String[] args) {
 
-        Scanner sc = new Scanner(System.in);
+        if (Conexion.conectar() == null) {
+            System.out.println("No se pudo establecer la conexion.");
+            return;
+        }
 
+        Scanner sc = new Scanner(System.in);
         Login login = new Login();
 
-        String usuario;
-        String contraseña;
-        int opcion;
+        Usuario usuarioLogeado = null;
 
         System.out.println("===== FERRETERIA SANTA CRUZ S.R.L =====");
 
-        System.out.print("Usuario: ");
-        usuario = sc.nextLine();
+        while (usuarioLogeado == null) {
 
-        System.out.print("Contraseña: ");
-        contraseña = sc.nextLine();
+            System.out.print("Usuario: ");
+            String username = sc.nextLine();
 
-        if (login.validar(usuario, contraseña)) {
+            System.out.print("Contraseña: ");
+            String password = sc.nextLine();
 
-            System.out.println("\nBienvenido al sistema.");
+            usuarioLogeado = login.iniciarSesion(username, password);
 
-            System.out.println("\n------ MENU ------");
-            System.out.println("1. Registrar producto");
-            System.out.println("2. Buscar producto por codigo");
-            System.out.println("3. Salir");
-            System.out.print("Seleccione una opcion: ");
-
-            opcion = sc.nextInt();
-
-            switch (opcion) {
-                case 1:
-                    System.out.println("Registrar producto...");
-                    break;
-
-                case 2:
-                    System.out.println("Buscar producto...");
-                    break;
-
-                case 3:
-                    System.out.println("Gracias por usar el sistema.");
-                    break;
-
-                default:
-                    System.out.println("Opcion incorrecta.");
+            if (usuarioLogeado == null) {
+                System.out.println("\nUsuario y/o contraseña incorrectos.\n");
             }
-
-        } else {
-
-            System.out.println("Usuario o contraseña incorrectos.");
-
         }
 
+        System.out.println("\nBienvenido al sistema " + usuarioLogeado.getNombre());
+
+        Menu menu = new Menu();
+        menu.mostrar();
+
         sc.close();
-
     }
-
 }
