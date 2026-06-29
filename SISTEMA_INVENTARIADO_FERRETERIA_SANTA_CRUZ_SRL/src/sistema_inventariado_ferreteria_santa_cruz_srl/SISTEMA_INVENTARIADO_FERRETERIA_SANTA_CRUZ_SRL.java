@@ -1,20 +1,43 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
 package sistema_inventariado_ferreteria_santa_cruz_srl;
 
-/**
- *
- * @author Solange Tuesta
- */
+import java.util.Scanner;
+
 public class SISTEMA_INVENTARIADO_FERRETERIA_SANTA_CRUZ_SRL {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-        // TODO code application logic here
+
+        if (Conexion.conectar() == null) {
+            System.out.println("No se pudo establecer la conexion.");
+            return;
+        }
+
+        Scanner sc = new Scanner(System.in);
+        Login login = new Login();
+
+        Usuario usuarioLogeado = null;
+
+        System.out.println("===== FERRETERIA SANTA CRUZ =====");
+
+        while (usuarioLogeado == null) {
+
+            System.out.print("Usuario: ");
+            String username = sc.nextLine();
+
+            System.out.print("Contraseña: ");
+            String password = sc.nextLine();
+
+            usuarioLogeado = login.iniciarSesion(username, password);
+
+            if (usuarioLogeado == null) {
+                System.out.println("\nUsuario y/o contraseña incorrectos.\n");
+            }
+        }
+
+        System.out.println("\nBienvenido al sistema " + usuarioLogeado.getNombre());
+
+        Menu menu = new Menu();
+        menu.mostrar();
+
+        sc.close();
     }
-    
 }
