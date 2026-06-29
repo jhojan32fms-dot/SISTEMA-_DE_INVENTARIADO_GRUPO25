@@ -1,19 +1,30 @@
 package sistema_inventariado_ferreteria_santa_cruz_srl;
 
+<<<<<<< HEAD
 import java.util.List;
+=======
+>>>>>>> 26a38f1d5ffb15c88c7d96b9f03599646a057594
 import java.util.Scanner;
 
 public class Menu {
 
+<<<<<<< HEAD
     Scanner sc = new Scanner(System.in);
     ProductoDAO dao = new ProductoDAO();
 
     public void mostrar() {
 
+=======
+    public void mostrar() {
+
+        Scanner sc = new Scanner(System.in);
+
+>>>>>>> 26a38f1d5ffb15c88c7d96b9f03599646a057594
         int opcion;
 
         do {
 
+<<<<<<< HEAD
             System.out.println("\n========= SISTEMA DE INVENTARIO Santa Cruz SRL =========");
             System.out.println("1. Registrar producto");
             System.out.println("2. Modificar producto");
@@ -28,10 +39,20 @@ public class Menu {
 
             opcion = sc.nextInt();
             sc.nextLine();
+=======
+            System.out.println("\n------ MENU ------");
+            System.out.println("1. Registrar producto");
+            System.out.println("2. Buscar producto");
+            System.out.println("3. Salir");
+            System.out.print("Seleccione una opcion: ");
+
+            opcion = sc.nextInt();
+>>>>>>> 26a38f1d5ffb15c88c7d96b9f03599646a057594
 
             switch (opcion) {
 
                 case 1:
+<<<<<<< HEAD
                     registrarProducto();
                     break;
 
@@ -240,4 +261,26 @@ public class Menu {
         else
             System.out.println("Error al actualizar.");
     }
+=======
+                    System.out.println("Registrar producto...");
+                    break;
+
+                case 2:
+                    System.out.println("Buscar producto...");
+                    break;
+
+                case 3:
+                    System.out.println("Gracias por usar el sistema.");
+                    break;
+
+                default:
+                    System.out.println("Opcion incorrecta.");
+
+            }
+
+        } while (opcion != 3);
+
+    }
+
+>>>>>>> 26a38f1d5ffb15c88c7d96b9f03599646a057594
 }
