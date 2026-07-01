@@ -24,10 +24,8 @@ public class Menu {
             System.out.println("7. Consultar stock");
             System.out.println("8. Actualizar stock");
             System.out.println("9. Salir");
-            System.out.print("Opcion: ");
 
-            opcion = sc.nextInt();
-            sc.nextLine();
+            opcion = leerOpcion();
 
             // RF33 - Validar opciones del menú
             if (!MenuValidator.validarOpcion(opcion, 1, 9)) {
@@ -76,6 +74,25 @@ public class Menu {
         } while (opcion != 9);
     }
 
+    private int leerOpcion() {
+
+        while (true) {
+
+            System.out.print("Opcion: ");
+
+            try {
+                String input = sc.nextLine().trim();
+
+                int valor = Integer.parseInt(input);
+
+                return valor;
+
+            } catch (NumberFormatException e) {
+                System.out.println("Entrada inválida. Ingrese un número.");
+            }
+        }
+    }
+
     // RF01
     private void registrarProducto() {
 
@@ -106,6 +123,8 @@ public class Menu {
 
         System.out.print("Stock minimo: ");
         p.setStockMinimo(sc.nextInt());
+
+        sc.nextLine();
 
         p.setActivo(true);
 
@@ -150,6 +169,8 @@ public class Menu {
         System.out.print("Stock minimo: ");
         p.setStockMinimo(sc.nextInt());
 
+        sc.nextLine();
+
         p.setActivo(true);
 
         if (dao.modificar(p))
@@ -163,6 +184,7 @@ public class Menu {
 
         System.out.print("ID del producto: ");
         int id = sc.nextInt();
+        sc.nextLine();
 
         if (dao.eliminar(id))
             System.out.println("Producto eliminado.");
@@ -236,6 +258,7 @@ public class Menu {
 
         System.out.print("Nuevo stock: ");
         int stock = sc.nextInt();
+        sc.nextLine();
 
         if (dao.actualizarStock(codigo, stock))
             System.out.println("Stock actualizado.");
