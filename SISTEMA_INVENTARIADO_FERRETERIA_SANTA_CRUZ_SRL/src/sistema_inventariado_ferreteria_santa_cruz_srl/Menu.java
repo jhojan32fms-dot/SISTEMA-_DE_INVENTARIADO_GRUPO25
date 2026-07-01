@@ -29,6 +29,11 @@ public class Menu {
             opcion = sc.nextInt();
             sc.nextLine();
 
+            // RF33 - Validar opciones del menú
+            if (!MenuValidator.validarOpcion(opcion, 1, 9)) {
+                continue;
+            }
+
             switch (opcion) {
 
                 case 1:
@@ -66,9 +71,6 @@ public class Menu {
                 case 9:
                     System.out.println("Fin del programa.");
                     break;
-
-                default:
-                    System.out.println("Opción incorrecta.");
             }
 
         } while (opcion != 9);
