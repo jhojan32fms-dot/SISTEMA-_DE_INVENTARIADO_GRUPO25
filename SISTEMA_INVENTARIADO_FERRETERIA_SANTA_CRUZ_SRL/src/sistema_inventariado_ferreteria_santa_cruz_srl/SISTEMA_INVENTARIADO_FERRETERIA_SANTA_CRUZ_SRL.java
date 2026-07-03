@@ -35,6 +35,10 @@ public class SISTEMA_INVENTARIADO_FERRETERIA_SANTA_CRUZ_SRL {
 
         System.out.println("\nBienvenido al sistema " + usuarioLogeado.getNombre());
 
+        // RF 35 - Cargar información almacenada al iniciar
+        SistemaDAO sistemaDAO = new SistemaDAO();
+        sistemaDAO.cargarDatosAlIniciar();
+
         Menu menu = new Menu();
         menu.mostrar();
 
