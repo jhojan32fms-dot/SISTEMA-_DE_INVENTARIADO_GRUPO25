@@ -1,5 +1,6 @@
 package sistema_inventariado_ferreteria_santa_cruz_srl;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -7,6 +8,8 @@ public class Menu {
 
     Scanner sc = new Scanner(System.in);
     ProductoDAO dao = new ProductoDAO();
+    RespaldoDAO respaldoDao = new RespaldoDAO(); // RF39
+    ExportadorDAO exportadorDao = new ExportadorDAO(); // RF34
 
     public void mostrar() {
 
@@ -23,12 +26,15 @@ public class Menu {
             System.out.println("6. Mostrar todos");
             System.out.println("7. Consultar stock");
             System.out.println("8. Actualizar stock");
-            System.out.println("9. Salir");
+            // RF 32 - Mostrar menú principal (nuevas opciones del módulo)
+            System.out.println("9. Generar respaldo de datos");
+            System.out.println("10. Exportar datos a archivo");
+            System.out.println("11. Salir");
 
             opcion = leerOpcion();
 
-            // RF33 - Validar opciones del menú
-            if (!MenuValidator.validarOpcion(opcion, 1, 9)) {
+            // RF 33 - Validar opciones del menú
+            if (!MenuValidator.validarOpcion(opcion, 1, 11)) {
                 continue;
             }
 
@@ -66,12 +72,23 @@ public class Menu {
                     actualizarStock();
                     break;
 
+                // RF 39 - Generar respaldo de datos
                 case 9:
-                    System.out.println("Fin del programa.");
+                    generarRespaldo();
+                    break;
+
+                // RF 34 - Guardar información en archivos
+                case 10:
+                    exportarDatos();
+                    break;
+
+                // RF 40 - Salir del sistema
+                case 11:
+                    salirSistema();
                     break;
             }
 
-        } while (opcion != 9);
+        } while (opcion != 11);
     }
 
     private int leerOpcion() {
@@ -264,5 +281,70 @@ public class Menu {
             System.out.println("Stock actualizado.");
         else
             System.out.println("Error al actualizar.");
+    }
+
+    // RF 39 - Generar respaldo de datos
+    private void generarRespaldo() {
+
+        System.out.print("¿Desea generar un respaldo de la información? (S/N): ");
+        String respuesta = sc.nextLine();
+
+        // RF 38 - Validar datos ingresados
+        if (!Validador.validarConfirmacion(respuesta)) {
+            MensajeUtil.mostrarError("Respuesta inválida. Ingrese S o N.");
+            return;
+        }
+
+        if (respuesta.trim().equalsIgnoreCase("N")) {
+            System.out.println("Respaldo cancelado.");
+            return;
+        }
+
+        if (respaldoDao.generarRespaldo())
+            // RF 36 - Confirmar operaciones
+            MensajeUtil.confirmarOperacion("Respaldo generado correctamente.");
+        else
+            // RF 37 - Mostrar mensajes de error
+            MensajeUtil.mostrarError("No se pudo generar el respaldo.");
+    }
+
+    // RF 34 - Guardar información en archivos
+    private void exportarDatos() {
+
+        String ruta = exportadorDao.exportarProductosCSV();
+
+        if (ruta != null)
+            // RF 36 - Confirmar operaciones
+            MensajeUtil.confirmarOperacion("Datos exportados correctamente en: " + ruta);
+        else
+            // RF 37 - Mostrar mensajes de error
+            MensajeUtil.mostrarError("No se pudo exportar los datos.");
+    }
+
+    // RF 40 - Salir del sistema
+    private void salirSistema() {
+
+        System.out.println("\nCerrando el sistema de manera segura...");
+
+        try {
+
+            if (dao.cn != null && !dao.cn.isClosed()) {
+                dao.cn.close();
+            }
+
+            if (respaldoDao.cn != null && !respaldoDao.cn.isClosed()) {
+                respaldoDao.cn.close();
+            }
+
+        } catch (SQLException e) {
+
+            // RF 37 - Mostrar mensajes de error
+            MensajeUtil.mostrarError("Error al cerrar la conexión: " + e.getMessage());
+        }
+
+        sc.close();
+
+        // RF 36 - Confirmar operaciones
+        MensajeUtil.confirmarOperacion("Sesión finalizada. ¡Hasta pronto!");
     }
 }
