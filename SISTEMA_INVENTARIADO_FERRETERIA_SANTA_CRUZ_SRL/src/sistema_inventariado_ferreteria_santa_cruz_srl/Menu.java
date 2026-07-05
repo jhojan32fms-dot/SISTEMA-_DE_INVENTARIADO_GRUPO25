@@ -1,11 +1,22 @@
 package sistema_inventariado_ferreteria_santa_cruz_srl;
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+import java.util.List;
+=======
+>>>>>>> 26a38f1d5ffb15c88c7d96b9f03599646a057594
+=======
 import java.sql.SQLException;
 import java.util.List;
+>>>>>>> 9e57cb29090285f2b3b6593663c18e9b5bd054f9
 import java.util.Scanner;
 
 public class Menu {
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 9e57cb29090285f2b3b6593663c18e9b5bd054f9
     Scanner sc = new Scanner(System.in);
     ProductoDAO dao = new ProductoDAO();
     RespaldoDAO respaldoDao = new RespaldoDAO(); // RF39
@@ -13,10 +24,20 @@ public class Menu {
 
     public void mostrar() {
 
+=======
+    public void mostrar() {
+
+        Scanner sc = new Scanner(System.in);
+
+>>>>>>> 26a38f1d5ffb15c88c7d96b9f03599646a057594
         int opcion;
 
         do {
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 9e57cb29090285f2b3b6593663c18e9b5bd054f9
             System.out.println("\n========= SISTEMA DE INVENTARIO Santa Cruz SRL =========");
             System.out.println("1. Registrar producto");
             System.out.println("2. Modificar producto");
@@ -31,16 +52,34 @@ public class Menu {
             System.out.println("10. Exportar datos a archivo");
             System.out.println("11. Salir");
 
+<<<<<<< HEAD
+            opcion = sc.nextInt();
+            sc.nextLine();
+=======
+            System.out.println("\n------ MENU ------");
+            System.out.println("1. Registrar producto");
+            System.out.println("2. Buscar producto");
+            System.out.println("3. Salir");
+            System.out.print("Seleccione una opcion: ");
+
+            opcion = sc.nextInt();
+>>>>>>> 26a38f1d5ffb15c88c7d96b9f03599646a057594
+=======
             opcion = leerOpcion();
 
             // RF 33 - Validar opciones del menú
             if (!MenuValidator.validarOpcion(opcion, 1, 11)) {
                 continue;
             }
+>>>>>>> 9e57cb29090285f2b3b6593663c18e9b5bd054f9
 
             switch (opcion) {
 
                 case 1:
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 9e57cb29090285f2b3b6593663c18e9b5bd054f9
                     registrarProducto();
                     break;
 
@@ -282,6 +321,30 @@ public class Menu {
         else
             System.out.println("Error al actualizar.");
     }
+<<<<<<< HEAD
+=======
+                    System.out.println("Registrar producto...");
+                    break;
+
+                case 2:
+                    System.out.println("Buscar producto...");
+                    break;
+
+                case 3:
+                    System.out.println("Gracias por usar el sistema.");
+                    break;
+
+                default:
+                    System.out.println("Opcion incorrecta.");
+
+            }
+
+        } while (opcion != 3);
+
+    }
+
+>>>>>>> 26a38f1d5ffb15c88c7d96b9f03599646a057594
+=======
 
     // RF 39 - Generar respaldo de datos
     private void generarRespaldo() {
@@ -347,4 +410,5 @@ public class Menu {
         // RF 36 - Confirmar operaciones
         MensajeUtil.confirmarOperacion("Sesión finalizada. ¡Hasta pronto!");
     }
+>>>>>>> 9e57cb29090285f2b3b6593663c18e9b5bd054f9
 }
