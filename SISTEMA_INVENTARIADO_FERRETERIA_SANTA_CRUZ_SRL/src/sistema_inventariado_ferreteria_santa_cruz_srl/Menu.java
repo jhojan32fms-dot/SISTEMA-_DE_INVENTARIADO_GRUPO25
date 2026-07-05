@@ -1,16 +1,26 @@
 package sistema_inventariado_ferreteria_santa_cruz_srl;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import java.util.List;
 =======
 >>>>>>> 26a38f1d5ffb15c88c7d96b9f03599646a057594
+=======
+import java.sql.SQLException;
+import java.util.List;
+>>>>>>> 9e57cb29090285f2b3b6593663c18e9b5bd054f9
 import java.util.Scanner;
 
 public class Menu {
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 9e57cb29090285f2b3b6593663c18e9b5bd054f9
     Scanner sc = new Scanner(System.in);
     ProductoDAO dao = new ProductoDAO();
+    RespaldoDAO respaldoDao = new RespaldoDAO(); // RF39
+    ExportadorDAO exportadorDao = new ExportadorDAO(); // RF34
 
     public void mostrar() {
 
@@ -25,6 +35,9 @@ public class Menu {
         do {
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 9e57cb29090285f2b3b6593663c18e9b5bd054f9
             System.out.println("\n========= SISTEMA DE INVENTARIO Santa Cruz SRL =========");
             System.out.println("1. Registrar producto");
             System.out.println("2. Modificar producto");
@@ -34,9 +47,12 @@ public class Menu {
             System.out.println("6. Mostrar todos");
             System.out.println("7. Consultar stock");
             System.out.println("8. Actualizar stock");
-            System.out.println("9. Salir");
-            System.out.print("Opcion: ");
+            // RF 32 - Mostrar menú principal (nuevas opciones del módulo)
+            System.out.println("9. Generar respaldo de datos");
+            System.out.println("10. Exportar datos a archivo");
+            System.out.println("11. Salir");
 
+<<<<<<< HEAD
             opcion = sc.nextInt();
             sc.nextLine();
 =======
@@ -48,11 +64,22 @@ public class Menu {
 
             opcion = sc.nextInt();
 >>>>>>> 26a38f1d5ffb15c88c7d96b9f03599646a057594
+=======
+            opcion = leerOpcion();
+
+            // RF 33 - Validar opciones del menú
+            if (!MenuValidator.validarOpcion(opcion, 1, 11)) {
+                continue;
+            }
+>>>>>>> 9e57cb29090285f2b3b6593663c18e9b5bd054f9
 
             switch (opcion) {
 
                 case 1:
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 9e57cb29090285f2b3b6593663c18e9b5bd054f9
                     registrarProducto();
                     break;
 
@@ -84,15 +111,42 @@ public class Menu {
                     actualizarStock();
                     break;
 
+                // RF 39 - Generar respaldo de datos
                 case 9:
-                    System.out.println("Fin del programa.");
+                    generarRespaldo();
                     break;
 
-                default:
-                    System.out.println("Opción incorrecta.");
+                // RF 34 - Guardar información en archivos
+                case 10:
+                    exportarDatos();
+                    break;
+
+                // RF 40 - Salir del sistema
+                case 11:
+                    salirSistema();
+                    break;
             }
 
-        } while (opcion != 9);
+        } while (opcion != 11);
+    }
+
+    private int leerOpcion() {
+
+        while (true) {
+
+            System.out.print("Opcion: ");
+
+            try {
+                String input = sc.nextLine().trim();
+
+                int valor = Integer.parseInt(input);
+
+                return valor;
+
+            } catch (NumberFormatException e) {
+                System.out.println("Entrada inválida. Ingrese un número.");
+            }
+        }
     }
 
     // RF01
@@ -125,6 +179,8 @@ public class Menu {
 
         System.out.print("Stock minimo: ");
         p.setStockMinimo(sc.nextInt());
+
+        sc.nextLine();
 
         p.setActivo(true);
 
@@ -169,6 +225,8 @@ public class Menu {
         System.out.print("Stock minimo: ");
         p.setStockMinimo(sc.nextInt());
 
+        sc.nextLine();
+
         p.setActivo(true);
 
         if (dao.modificar(p))
@@ -182,6 +240,7 @@ public class Menu {
 
         System.out.print("ID del producto: ");
         int id = sc.nextInt();
+        sc.nextLine();
 
         if (dao.eliminar(id))
             System.out.println("Producto eliminado.");
@@ -255,12 +314,14 @@ public class Menu {
 
         System.out.print("Nuevo stock: ");
         int stock = sc.nextInt();
+        sc.nextLine();
 
         if (dao.actualizarStock(codigo, stock))
             System.out.println("Stock actualizado.");
         else
             System.out.println("Error al actualizar.");
     }
+<<<<<<< HEAD
 =======
                     System.out.println("Registrar producto...");
                     break;
@@ -283,4 +344,71 @@ public class Menu {
     }
 
 >>>>>>> 26a38f1d5ffb15c88c7d96b9f03599646a057594
+=======
+
+    // RF 39 - Generar respaldo de datos
+    private void generarRespaldo() {
+
+        System.out.print("¿Desea generar un respaldo de la información? (S/N): ");
+        String respuesta = sc.nextLine();
+
+        // RF 38 - Validar datos ingresados
+        if (!Validador.validarConfirmacion(respuesta)) {
+            MensajeUtil.mostrarError("Respuesta inválida. Ingrese S o N.");
+            return;
+        }
+
+        if (respuesta.trim().equalsIgnoreCase("N")) {
+            System.out.println("Respaldo cancelado.");
+            return;
+        }
+
+        if (respaldoDao.generarRespaldo())
+            // RF 36 - Confirmar operaciones
+            MensajeUtil.confirmarOperacion("Respaldo generado correctamente.");
+        else
+            // RF 37 - Mostrar mensajes de error
+            MensajeUtil.mostrarError("No se pudo generar el respaldo.");
+    }
+
+    // RF 34 - Guardar información en archivos
+    private void exportarDatos() {
+
+        String ruta = exportadorDao.exportarProductosCSV();
+
+        if (ruta != null)
+            // RF 36 - Confirmar operaciones
+            MensajeUtil.confirmarOperacion("Datos exportados correctamente en: " + ruta);
+        else
+            // RF 37 - Mostrar mensajes de error
+            MensajeUtil.mostrarError("No se pudo exportar los datos.");
+    }
+
+    // RF 40 - Salir del sistema
+    private void salirSistema() {
+
+        System.out.println("\nCerrando el sistema de manera segura...");
+
+        try {
+
+            if (dao.cn != null && !dao.cn.isClosed()) {
+                dao.cn.close();
+            }
+
+            if (respaldoDao.cn != null && !respaldoDao.cn.isClosed()) {
+                respaldoDao.cn.close();
+            }
+
+        } catch (SQLException e) {
+
+            // RF 37 - Mostrar mensajes de error
+            MensajeUtil.mostrarError("Error al cerrar la conexión: " + e.getMessage());
+        }
+
+        sc.close();
+
+        // RF 36 - Confirmar operaciones
+        MensajeUtil.confirmarOperacion("Sesión finalizada. ¡Hasta pronto!");
+    }
+>>>>>>> 9e57cb29090285f2b3b6593663c18e9b5bd054f9
 }

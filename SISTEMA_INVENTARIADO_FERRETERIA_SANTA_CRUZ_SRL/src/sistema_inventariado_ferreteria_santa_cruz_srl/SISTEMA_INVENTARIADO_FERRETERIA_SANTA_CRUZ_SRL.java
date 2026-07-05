@@ -10,6 +10,9 @@ public class SISTEMA_INVENTARIADO_FERRETERIA_SANTA_CRUZ_SRL {
             System.out.println("No se pudo establecer la conexion.");
             return;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 9e57cb29090285f2b3b6593663c18e9b5bd054f9
         }
 
         Scanner sc = new Scanner(System.in);
@@ -34,6 +37,7 @@ public class SISTEMA_INVENTARIADO_FERRETERIA_SANTA_CRUZ_SRL {
             }
         }
 
+<<<<<<< HEAD
 =======
         }
 
@@ -60,7 +64,13 @@ public class SISTEMA_INVENTARIADO_FERRETERIA_SANTA_CRUZ_SRL {
         }
 
 >>>>>>> 26a38f1d5ffb15c88c7d96b9f03599646a057594
+=======
+>>>>>>> 9e57cb29090285f2b3b6593663c18e9b5bd054f9
         System.out.println("\nBienvenido al sistema " + usuarioLogeado.getNombre());
+
+        // RF 35 - Cargar información almacenada al iniciar
+        SistemaDAO sistemaDAO = new SistemaDAO();
+        sistemaDAO.cargarDatosAlIniciar();
 
         Menu menu = new Menu();
         menu.mostrar();
