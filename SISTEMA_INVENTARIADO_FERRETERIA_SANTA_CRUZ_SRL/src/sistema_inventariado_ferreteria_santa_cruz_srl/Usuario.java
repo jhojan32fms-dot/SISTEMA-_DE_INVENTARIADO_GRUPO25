@@ -2,14 +2,20 @@ package sistema_inventariado_ferreteria_santa_cruz_srl;
 
 public class Usuario {
 
+    private int idUsuario;
     private String nombre;
     private String usuario;
     private String contraseña;
 
-    public Usuario(String nombre, String usuario, String contraseña) {
+    public Usuario(int idUsuario, String nombre, String usuario, String contraseña) {
+        this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.usuario = usuario;
         this.contraseña = contraseña;
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
     }
 
     public String getNombre() {

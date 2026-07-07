@@ -10,6 +10,12 @@ public class Menu {
     ProductoDAO dao = new ProductoDAO();
     RespaldoDAO respaldoDao = new RespaldoDAO(); // RF39
     ExportadorDAO exportadorDao = new ExportadorDAO(); // RF34
+    MovimientoDAO movimientoDao = new MovimientoDAO(); // RF11-RF16
+    Usuario usuarioActual; 
+    
+    public Menu(Usuario usuarioActual) {
+        this.usuarioActual = usuarioActual;
+    }
 
     public void mostrar() {
 
@@ -26,15 +32,21 @@ public class Menu {
             System.out.println("6. Mostrar todos");
             System.out.println("7. Consultar stock");
             System.out.println("8. Actualizar stock");
+            // RF09-RF16 - Gestión de precios y movimientos
+            System.out.println("9. Registrar precio");
+            System.out.println("10. Modificar precio");
+            System.out.println("11. Registrar entrada de stock");
+            System.out.println("12. Registrar salida de stock");
+            System.out.println("13. Consultar historial de movimientos");
             // RF 32 - Mostrar menú principal (nuevas opciones del módulo)
-            System.out.println("9. Generar respaldo de datos");
-            System.out.println("10. Exportar datos a archivo");
-            System.out.println("11. Salir");
+            System.out.println("14. Generar respaldo de datos");
+            System.out.println("15. Exportar datos a archivo");
+            System.out.println("16. Salir");
 
             opcion = leerOpcion();
 
             // RF 33 - Validar opciones del menú
-            if (!MenuValidator.validarOpcion(opcion, 1, 11)) {
+            if (!MenuValidator.validarOpcion(opcion, 1, 16)) {
                 continue;
             }
 
@@ -72,23 +84,48 @@ public class Menu {
                     actualizarStock();
                     break;
 
-                // RF 39 - Generar respaldo de datos
+                // RF09 - Registrar precio
                 case 9:
+                    registrarPrecioProducto();
+                    break;
+
+                // RF10 - Modificar precio
+                case 10:
+                    modificarPrecioProducto();
+                    break;
+
+                // RF11 - Registrar entrada de stock
+                case 11:
+                    registrarEntradaStock();
+                    break;
+
+                // RF12 - Registrar salida de stock
+                case 12:
+                    registrarSalidaStock();
+                    break;
+
+                // RF16 - Consultar historial de movimientos
+                case 13:
+                    consultarHistorialMovimientos();
+                    break;
+
+                // RF 39 - Generar respaldo de datos
+                case 14:
                     generarRespaldo();
                     break;
 
                 // RF 34 - Guardar información en archivos
-                case 10:
+                case 15:
                     exportarDatos();
                     break;
 
                 // RF 40 - Salir del sistema
-                case 11:
+                case 16:
                     salirSistema();
                     break;
             }
 
-        } while (opcion != 11);
+        } while (opcion != 16);
     }
 
     private int leerOpcion() {
@@ -283,6 +320,143 @@ public class Menu {
             System.out.println("Error al actualizar.");
     }
 
+    // RF09 - Registrar precio
+    private void registrarPrecioProducto() {
+
+        System.out.print("Codigo: ");
+        String codigo = sc.nextLine();
+
+        System.out.print("Precio a registrar: ");
+        double precio = sc.nextDouble();
+        sc.nextLine();
+
+        // RF 38 - Validar datos ingresados
+        if (!Validador.validarNumeroPositivo(precio)) {
+            MensajeUtil.mostrarError("El precio debe ser mayor a 0.");
+            return;
+        }
+
+        if (dao.registrarPrecio(codigo, precio))
+            // RF 36 - Confirmar operaciones
+            MensajeUtil.confirmarOperacion("Precio registrado correctamente.");
+        else
+            // RF 37 - Mostrar mensajes de error
+            MensajeUtil.mostrarError("No se pudo registrar el precio (verifique el código o si ya tiene un precio asignado).");
+    }
+
+    // RF10 - Modificar precio
+    private void modificarPrecioProducto() {
+
+        System.out.print("Codigo: ");
+        String codigo = sc.nextLine();
+
+        System.out.print("Nuevo precio: ");
+        double precio = sc.nextDouble();
+        sc.nextLine();
+
+        // RF 38 - Validar datos ingresados
+        if (!Validador.validarNumeroPositivo(precio)) {
+            MensajeUtil.mostrarError("El precio debe ser mayor a 0.");
+            return;
+        }
+
+        if (dao.modificarPrecio(codigo, precio))
+            // RF 36 - Confirmar operaciones
+            MensajeUtil.confirmarOperacion("Precio modificado correctamente.");
+        else
+            // RF 37 - Mostrar mensajes de error
+            MensajeUtil.mostrarError("No se pudo modificar el precio (verifique el código o si aún no tiene un precio registrado).");
+    }
+
+    // RF11 - Registrar entrada de stock
+    private void registrarEntradaStock() {
+
+        System.out.print("Codigo: ");
+        String codigo = sc.nextLine();
+
+        System.out.print("Cantidad a ingresar: ");
+        int cantidad = sc.nextInt();
+        sc.nextLine();
+
+        // RF14 - Registrar motivo del movimiento
+        System.out.print("Motivo del ingreso: ");
+        String motivo = sc.nextLine();
+
+        // RF 38 - Validar datos ingresados
+        if (!Validador.validarTexto(motivo)) {
+            MensajeUtil.mostrarError("Debe ingresar un motivo válido.");
+            return;
+        }
+
+        // RF15 - Registrar fecha del movimiento (se registra automáticamente)
+        if (movimientoDao.registrarEntrada(codigo, cantidad, motivo, usuarioActual.getIdUsuario()))
+            // RF 36 - Confirmar operaciones
+            MensajeUtil.confirmarOperacion("Entrada de stock registrada correctamente.");
+        else
+            // RF 37 - Mostrar mensajes de error
+            MensajeUtil.mostrarError("No se pudo registrar la entrada de stock.");
+    }
+
+    // RF12 - Registrar salida de stock
+    private void registrarSalidaStock() {
+
+        System.out.print("Codigo: ");
+        String codigo = sc.nextLine();
+
+        System.out.print("Cantidad a retirar: ");
+        int cantidad = sc.nextInt();
+        sc.nextLine();
+
+        // RF13 - Validar stock disponible
+        if (!movimientoDao.validarStockDisponible(codigo, cantidad)) {
+            MensajeUtil.mostrarError("Stock insuficiente para realizar la salida.");
+            return;
+        }
+
+        // RF14 - Registrar motivo del movimiento
+        System.out.print("Motivo de la salida: ");
+        String motivo = sc.nextLine();
+
+        // RF 38 - Validar datos ingresados
+        if (!Validador.validarTexto(motivo)) {
+            MensajeUtil.mostrarError("Debe ingresar un motivo válido.");
+            return;
+        }
+
+        // RF15 - Registrar fecha del movimiento (se registra automáticamente)
+        if (movimientoDao.registrarSalida(codigo, cantidad, motivo, usuarioActual.getIdUsuario()))
+            // RF 36 - Confirmar operaciones
+            MensajeUtil.confirmarOperacion("Salida de stock registrada correctamente.");
+        else
+            // RF 37 - Mostrar mensajes de error
+            MensajeUtil.mostrarError("No se pudo registrar la salida de stock.");
+    }
+
+    // RF16 - Consultar historial de movimientos
+    private void consultarHistorialMovimientos() {
+
+        System.out.print("Codigo: ");
+        String codigo = sc.nextLine();
+
+        List<Movimiento> lista = movimientoDao.consultarHistorial(codigo);
+
+        if (lista.isEmpty()) {
+            System.out.println("No existen movimientos registrados para este producto.");
+            return;
+        }
+
+        for (Movimiento m : lista) {
+
+            System.out.println("--------------------------------");
+            System.out.println("Tipo: " + m.getTipo());
+            System.out.println("Cantidad: " + m.getCantidad());
+            System.out.println("Motivo: " + m.getMotivo());
+            System.out.println("Fecha: " + m.getFecha());
+            System.out.println("Stock antes: " + m.getStockAntes());
+            System.out.println("Stock despues: " + m.getStockDespues());
+        }
+    }
+
     // RF 39 - Generar respaldo de datos
     private void generarRespaldo() {
 
@@ -334,6 +508,10 @@ public class Menu {
 
             if (respaldoDao.cn != null && !respaldoDao.cn.isClosed()) {
                 respaldoDao.cn.close();
+            }
+
+            if (movimientoDao.cn != null && !movimientoDao.cn.isClosed()) {
+                movimientoDao.cn.close();
             }
 
         } catch (SQLException e) {

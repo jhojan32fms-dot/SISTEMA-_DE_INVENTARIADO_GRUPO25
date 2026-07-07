@@ -269,4 +269,52 @@ public class ProductoDAO {
         return false;
     }
 
+    // ===========================
+    // RF09 - Registrar precio
+    // ===========================
+    public boolean registrarPrecio(String codigo, double precio) {
+
+        String sql = "UPDATE productos SET precio=? WHERE codigo=? AND (precio IS NULL OR precio <= 0)";
+
+        try {
+
+            PreparedStatement ps = cn.prepareStatement(sql);
+
+            ps.setDouble(1, precio);
+            ps.setString(2, codigo);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+
+            System.out.println(e.getMessage());
+        }
+
+        return false;
+    }
+
+    // ===========================
+    // RF10 - Modificar precio
+    // ===========================
+    public boolean modificarPrecio(String codigo, double precio) {
+
+        String sql = "UPDATE productos SET precio=? WHERE codigo=? AND precio > 0";
+
+        try {
+
+            PreparedStatement ps = cn.prepareStatement(sql);
+
+            ps.setDouble(1, precio);
+            ps.setString(2, codigo);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+
+            System.out.println(e.getMessage());
+        }
+
+        return false;
+    }
+
 }

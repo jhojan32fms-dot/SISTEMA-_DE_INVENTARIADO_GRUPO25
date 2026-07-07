@@ -1,0 +1,11 @@
+id_producto,codigo,nombre,descripcion,id_categoria,precio,unidad_medida,stock_actual,stock_minimo,activo
+1,MART-001,Martillo de carpintero 16oz,Mango de madera reforzado,1,25.5,unidad,15,5,true
+2,DEST-001,Destornillador plano 6",Mango ergonomico,1,8.9,unidad,30,10,true
+3,DEST-002,Destornillador estrella 6",Mango ergonomico,1,8.9,unidad,28,10,true
+4,TALAD-001,Taladro percutor 500W,Incluye set de brocas,2,189.9,unidad,5,2,true
+5,CEM-001,Cemento Portland 42.5kg,Saco de 42.5 kg,3,32.0,saco,50,20,true
+6,TUB-001,Tuberia PVC 1/2" x 3m,Para agua fria a presion,4,7.5,unidad,40,15,true
+7,CAB-001,Cable electrico 2.5mm TW,Precio por metro,5,2.2,metro,200,50,true
+8,PINT-001,Pintura latex blanco 1gal,Interior y exterior,6,45.0,galon,20,8,true
+9,TORN-001,Tornillo autoperforante 1",Caja x 100 unidades,7,12.0,caja,35,10,true
+10,CASC-001,Casco de seguridad blanco,Certificado ANSI Z89.1,8,17.5,unidad,3,5,true
