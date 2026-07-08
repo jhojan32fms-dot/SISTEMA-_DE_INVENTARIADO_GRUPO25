@@ -10,6 +10,7 @@ public class Menu {
     ProductoDAO dao = new ProductoDAO();
     RespaldoDAO respaldoDao = new RespaldoDAO(); // RF39
     ExportadorDAO exportadorDao = new ExportadorDAO(); // RF34
+    ReporteDAO reporteDao = new ReporteDAO(); // Bloque 4 - RF25 a RF30
 
     public void mostrar() {
 
@@ -29,12 +30,19 @@ public class Menu {
             // RF 32 - Mostrar menú principal (nuevas opciones del módulo)
             System.out.println("9. Generar respaldo de datos");
             System.out.println("10. Exportar datos a archivo");
-            System.out.println("11. Salir");
+            // Bloque 4 - Reportes y consultas
+            System.out.println("11. Movimientos por producto (RF25)");
+            System.out.println("12. Movimientos por categoria (RF26)");
+            System.out.println("13. Inventario general (RF27)");
+            System.out.println("14. Alertas activas (RF28)");
+            System.out.println("15. Exportar reporte de inventario (RF29)");
+            System.out.println("16. Resumen de inventario (RF30)");
+            System.out.println("17. Salir");
 
             opcion = leerOpcion();
 
             // RF 33 - Validar opciones del menú
-            if (!MenuValidator.validarOpcion(opcion, 1, 11)) {
+            if (!MenuValidator.validarOpcion(opcion, 1, 17)) {
                 continue;
             }
 
@@ -82,13 +90,43 @@ public class Menu {
                     exportarDatos();
                     break;
 
-                // RF 40 - Salir del sistema
+                // RF25 - Movimientos por producto
                 case 11:
+                    movimientosPorProducto();
+                    break;
+
+                // RF26 - Movimientos por categoria
+                case 12:
+                    movimientosPorCategoria();
+                    break;
+
+                // RF27 - Inventario general
+                case 13:
+                    inventarioGeneral();
+                    break;
+
+                // RF28 - Alertas activas
+                case 14:
+                    alertasActivas();
+                    break;
+
+                // RF29 - Exportar reporte de inventario
+                case 15:
+                    exportarReporteInventario();
+                    break;
+
+                // RF30 - Resumen de inventario
+                case 16:
+                    resumenInventario();
+                    break;
+
+                // RF 40 - Salir del sistema
+                case 17:
                     salirSistema();
                     break;
             }
 
-        } while (opcion != 11);
+        } while (opcion != 17);
     }
 
     private int leerOpcion() {
@@ -319,6 +357,59 @@ public class Menu {
         else
             // RF 37 - Mostrar mensajes de error
             MensajeUtil.mostrarError("No se pudo exportar los datos.");
+    }
+
+    // ===========================
+    // Bloque 4 - Reportes y consultas
+    // ===========================
+
+    // RF25 - Mostrar movimientos por producto
+    private void movimientosPorProducto() {
+
+        System.out.print("Codigo del producto: ");
+        String codigo = sc.nextLine();
+
+        reporteDao.mostrarMovimientosPorProducto(codigo);
+    }
+
+    // RF26 - Mostrar movimientos por categoria
+    private void movimientosPorCategoria() {
+
+        System.out.print("Nombre de la categoria: ");
+        String categoria = sc.nextLine();
+
+        reporteDao.mostrarMovimientosPorCategoria(categoria);
+    }
+
+    // RF27 - Mostrar inventario general
+    private void inventarioGeneral() {
+
+        reporteDao.mostrarInventarioGeneral();
+    }
+
+    // RF28 - Mostrar alertas activas
+    private void alertasActivas() {
+
+        reporteDao.mostrarAlertasActivas();
+    }
+
+    // RF29 - Exportar reporte de inventario a archivo
+    private void exportarReporteInventario() {
+
+        String ruta = exportadorDao.exportarInventarioCSV();
+
+        if (ruta != null)
+            // RF 36 - Confirmar operaciones
+            MensajeUtil.confirmarOperacion("Reporte de inventario exportado en: " + ruta);
+        else
+            // RF 37 - Mostrar mensajes de error
+            MensajeUtil.mostrarError("No se pudo exportar el reporte de inventario.");
+    }
+
+    // RF30 - Mostrar resumen de inventario
+    private void resumenInventario() {
+
+        reporteDao.mostrarResumenInventario();
     }
 
     // RF 40 - Salir del sistema
