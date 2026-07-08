@@ -39,7 +39,7 @@ public class SISTEMA_INVENTARIADO_FERRETERIA_SANTA_CRUZ_SRL {
         SistemaDAO sistemaDAO = new SistemaDAO();
         sistemaDAO.cargarDatosAlIniciar();
 
-        Menu menu = new Menu();
+        Menu menu = new Menu(usuarioLogeado);
         menu.mostrar();
 
         sc.close();

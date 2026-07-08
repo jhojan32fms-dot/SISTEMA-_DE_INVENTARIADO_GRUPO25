@@ -8,7 +8,7 @@ public class Login {
 
     public Usuario iniciarSesion(String usuario, String contraseña) {
 
-        String sql = "SELECT nombre, username, password FROM usuarios WHERE username = ? AND password = ?";
+        String sql = "SELECT id_usuario, nombre, username, password FROM usuarios WHERE username = ? AND password = ? AND activo = 1";
 
         try {
 
@@ -24,6 +24,7 @@ public class Login {
             if (rs.next()) {
 
                 return new Usuario(
+                        rs.getInt("id_usuario"),
                         rs.getString("nombre"),
                         rs.getString("username"),
                         rs.getString("password")
