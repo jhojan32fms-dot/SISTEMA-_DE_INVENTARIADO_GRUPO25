@@ -12,6 +12,7 @@ public class Menu {
     ExportadorDAO exportadorDao = new ExportadorDAO(); // RF34
     ReporteDAO reporteDao = new ReporteDAO(); // Bloque 4 - RF25 a RF30
     MovimientoDAO movimientoDao = new MovimientoDAO(); // RF11-RF16
+    InventarioDAO inventarioDao = new InventarioDAO(); // Bloque 3 - RF17 a RF24
     Usuario usuarioActual;
 
     public Menu(Usuario usuarioActual) {
@@ -49,12 +50,20 @@ public class Menu {
             System.out.println("19. Alertas activas (RF28)");
             System.out.println("20. Exportar reporte de inventario (RF29)");
             System.out.println("21. Resumen de inventario (RF30)");
-            System.out.println("22. Salir");
+            // Bloque 3 - Alertas y consultas de movimiento
+            System.out.println("22. Buscar movimientos por fecha (RF17)");
+            System.out.println("23. Mostrar movimientos recientes (RF18)");
+            System.out.println("24. Configurar stock minimo de alerta (RF19)");
+            System.out.println("25. Consultar alertas de bajo stock (RF20/RF21)");
+            System.out.println("26. Listar productos agotados (RF22)");
+            System.out.println("27. Mostrar entradas de almacen (RF23)");
+            System.out.println("28. Mostrar salidas de almacen (RF24)");
+            System.out.println("29. Salir");
 
             opcion = leerOpcion();
 
             // RF 33 - Validar opciones del menú
-            if (!MenuValidator.validarOpcion(opcion, 1, 22)) {
+            if (!MenuValidator.validarOpcion(opcion, 1, 29)) {
                 continue;
             }
 
@@ -157,13 +166,48 @@ public class Menu {
                     resumenInventario();
                     break;
 
-                // RF 40 - Salir del sistema
+                // RF17 - Buscar movimientos por fecha
                 case 22:
+                    buscarMovimientosPorFecha();
+                    break;
+
+                // RF18 - Mostrar movimientos recientes
+                case 23:
+                    mostrarMovimientosRecientes();
+                    break;
+
+                // RF19 - Configurar stock minimo de alerta
+                case 24:
+                    configurarStockMinimo();
+                    break;
+
+                // RF20/RF21 - Consultar alertas de bajo stock
+                case 25:
+                    alertasBajoStock();
+                    break;
+
+                // RF22 - Listar productos agotados
+                case 26:
+                    productosAgotados();
+                    break;
+
+                // RF23 - Mostrar entradas de almacen
+                case 27:
+                    entradasAlmacen();
+                    break;
+
+                // RF24 - Mostrar salidas de almacen
+                case 28:
+                    salidasAlmacen();
+                    break;
+
+                // RF 40 - Salir del sistema
+                case 29:
                     salirSistema();
                     break;
             }
 
-        } while (opcion != 22);
+        } while (opcion != 29);
     }
 
     private int leerOpcion() {
@@ -584,6 +628,88 @@ public class Menu {
     private void resumenInventario() {
 
         reporteDao.mostrarResumenInventario();
+    }
+
+    // ===========================
+    // Bloque 3 - Alertas y consultas de movimiento
+    // ===========================
+
+    // RF17 - Buscar movimientos por fecha
+    private void buscarMovimientosPorFecha() {
+
+        System.out.print("Ingrese fecha de busqueda (AAAA-MM-DD): ");
+        String fecha = sc.nextLine();
+
+        List<Movimiento> lista = inventarioDao.buscarMovimientosPorFecha(fecha);
+        imprimirMovimientos(lista);
+    }
+
+    // RF18 - Mostrar movimientos recientes
+    private void mostrarMovimientosRecientes() {
+
+        List<Movimiento> lista = inventarioDao.mostrarMovimientosRecientes();
+        imprimirMovimientos(lista);
+    }
+
+    // RF19 - Configurar stock minimo de alerta para producto
+    private void configurarStockMinimo() {
+
+        System.out.print("Codigo del producto: ");
+        String codigo = sc.nextLine();
+
+        System.out.print("Stock minimo de seguridad: ");
+        int cantMin = sc.nextInt();
+        sc.nextLine();
+
+        if (inventarioDao.registrarStockMinimo(codigo, cantMin))
+            // RF 36 - Confirmar operaciones
+            MensajeUtil.confirmarOperacion("Stock minimo actualizado correctamente.");
+        else
+            // RF 37 - Mostrar mensajes de error
+            MensajeUtil.mostrarError("No se pudo actualizar el stock minimo (verifique el codigo).");
+    }
+
+    // RF20/RF21 - Consultar alertas de bajo stock / stock critico
+    private void alertasBajoStock() {
+
+        inventarioDao.mostrarProductosBajoStock();
+    }
+
+    // RF22 - Listar productos agotados
+    private void productosAgotados() {
+
+        inventarioDao.mostrarProductosAgotados();
+    }
+
+    // RF23 - Mostrar todas las entradas de almacen
+    private void entradasAlmacen() {
+
+        List<Movimiento> lista = inventarioDao.mostrarMovimientosPorTipo("ENTRADA");
+        imprimirMovimientos(lista);
+    }
+
+    // RF24 - Mostrar todas las salidas de almacen
+    private void salidasAlmacen() {
+
+        List<Movimiento> lista = inventarioDao.mostrarMovimientosPorTipo("SALIDA");
+        imprimirMovimientos(lista);
+    }
+
+    // Metodo auxiliar para imprimir listas de movimientos sin duplicar codigo (Bloque 3)
+    private void imprimirMovimientos(List<Movimiento> lista) {
+
+        if (lista.isEmpty()) {
+            System.out.println("No hay registros de movimientos en esta consulta.");
+            return;
+        }
+
+        for (Movimiento m : lista) {
+            System.out.println("ID Movimiento: " + m.getIdMovimiento()
+                    + " | Articulo: " + m.getCodigoProducto()
+                    + " | Accion: " + m.getTipoMovimiento()
+                    + " | Cantidad: " + m.getCantidad()
+                    + " | Fecha: " + m.getFecha());
+        }
     }
 
     // RF 40 - Salir del sistema
