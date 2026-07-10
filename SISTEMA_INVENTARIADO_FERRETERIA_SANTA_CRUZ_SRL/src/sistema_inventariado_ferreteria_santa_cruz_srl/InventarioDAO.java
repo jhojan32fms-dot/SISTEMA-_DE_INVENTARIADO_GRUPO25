@@ -24,7 +24,6 @@ public class InventarioDAO {
     }
 
     // RF17: Buscar movimientos filtrados por una fecha específica 
-    // (corregido: la tabla movimientos no tiene codigo_producto/tipo_movimiento,
     // se hace JOIN con productos usando id_producto y se compara solo la parte de fecha del timestamp)
     public ArrayList<Movimiento> buscarMovimientosPorFecha(String fechaStr) {
         ArrayList<Movimiento> lista = new ArrayList<>();
@@ -51,7 +50,6 @@ public class InventarioDAO {
         return lista;
     }
 // RMostrar los últimos movimientos registrados 
-    // (corregido: JOIN con productos para obtener el codigo, ya que movimientos guarda id_producto)
     public ArrayList<Movimiento> mostrarMovimientosRecientes() {
         ArrayList<Movimiento> lista = new ArrayList<>();
         String sql = "SELECT m.id_movimiento, p.codigo AS codigo_producto, m.tipo AS tipo_movimiento, "
@@ -76,7 +74,6 @@ public class InventarioDAO {
         return lista;
     }
 // Buscar y mostrar los productos cuyo stock actual sea menor o igual al stock mínimo 
-    // (corregido: la columna real es stock_actual, no stock)
     public void mostrarProductosBajoStock() {
         String sql = "SELECT codigo, descripcion, stock_actual, stock_minimo FROM productos WHERE stock_actual <= stock_minimo AND stock_actual > 0";
         try (Connection con = Conexion.conectar();
@@ -92,7 +89,6 @@ public class InventarioDAO {
         }
     }
 // RF22: Mostrar de forma exclusiva los productos agotados (Stock exactamente igual a 0)
-    // (corregido: la columna real es stock_actual, no stock)
     public void mostrarProductosAgotados() {
         String sql = "SELECT codigo, descripcion FROM productos WHERE stock_actual = 0";
         try (Connection con = Conexion.conectar();
@@ -107,7 +103,6 @@ public class InventarioDAO {
         }
     }
     // RF23 y RF24: Mostrar movimientos filtrados por tipo ("ENTRADA" o "SALIDA")
-    // (corregido: JOIN con productos y comparación insensible a mayúsculas, ya que
     // MovimientoDAO guarda el tipo en minúsculas: "entrada" / "salida")
     public ArrayList<Movimiento> mostrarMovimientosPorTipo(String tipo) {
         ArrayList<Movimiento> lista = new ArrayList<>();
