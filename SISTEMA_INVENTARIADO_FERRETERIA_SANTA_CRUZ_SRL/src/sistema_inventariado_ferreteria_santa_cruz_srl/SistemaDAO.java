@@ -24,11 +24,11 @@ public class SistemaDAO {
 
             if (rs.next()) {
 
-                System.out.println("\n===== Datos cargados desde la base de datos =====");
+                /*System.out.println("\n===== Datos cargados desde la base de datos =====");
                 System.out.println("Productos registrados   : " + rs.getInt("total_productos"));
                 System.out.println("Categorias registradas  : " + rs.getInt("total_categorias"));
                 System.out.println("Movimientos registrados : " + rs.getInt("total_movimientos"));
-
+                */
                 // RF 36 - Confirmar operaciones
                 MensajeUtil.confirmarOperacion("Información almacenada cargada correctamente.");
             }
